@@ -1,0 +1,38 @@
+{
+  "name": "antigravity-claude-mcp",
+  "version": "1.0.0",
+  "description": "Claude MCP Connector for Google Gemini models via Antigravity without API keys",
+  "main": "bin/index.js",
+  "type": "module",
+  "bin": {
+    "antigravity-claude-mcp": "./bin/index.js"
+  },
+  "scripts": {
+    "start": "node bin/index.js",
+    "check": "node bin/index.js --check",
+    "setup": "node bin/index.js setup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaviMenegazzi/antigravity-claude-mcp.git"
+  },
+  "keywords": [
+    "claude",
+    "mcp",
+    "antigravity",
+    "gemini",
+    "claude-code",
+    "claude-desktop",
+    "model-context-protocol",
+    "gemini-3.8"
+  ],
+  "author": "Davi Menegazzi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DaviMenegazzi/antigravity-claude-mcp/issues"
+  },
+  "homepage": "https://github.com/DaviMenegazzi/antigravity-claude-mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
