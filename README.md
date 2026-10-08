@@ -1,6 +1,6 @@
 # 🚀 Antigravity Claude MCP Connector
 
-> Conector MCP (**Model Context Protocol**) oficial para utilizar **Google Gemini (Gemini 3.8 Flash, Gemini 3.8 Pro, etc.)** dentro do **Claude** (Claude Code e Claude Desktop) através da autenticação nativa do **Google Antigravity**.
+> Conector MCP (**Model Context Protocol**) oficial para utilizar **Google Gemini (Gemini 3.8 Flash, Gemini 2.5 Pro, etc.)** dentro do **Claude** (Claude Code e Claude Desktop) através da autenticação nativa do **Google Antigravity**.
 
 ✨ **VANTAGEM EXCLUSIVA: ZERO API KEY** ✨  
 Você **não precisa** de chave de API (`GEMINI_API_KEY`) nem de cartão de crédito no Google AI Studio. Este conector se comunica diretamente com a sessão local autenticada do Antigravity, trazendo respostas instantâneas dos modelos Gemini sem custo de API.
@@ -120,7 +120,7 @@ Com o conector ativo, o Claude ganha acesso imediato às ferramentas do Gemini. 
 ### 1. Pedir uma segunda opinião ou consulta direta:
 > *"Claude, use a ferramenta ask_gemini para pedir a opinião do Gemini sobre como estruturar este banco de dados."*
 
-### 2. Usar o Gemini 3.8 Pro para raciocínio complexo ou código:
+### 2. Usar o Gemini Pro para raciocínio complexo ou código:
 > *"Claude, passe esse trecho de código para o Gemini com o modelo 'pro' e peça para analisar possíveis problemas de concorrência."*
 
 ### 3. Comparar respostas entre modelos:
@@ -142,7 +142,7 @@ Com o conector ativo, o Claude ganha acesso imediato às ferramentas do Gemini. 
 
 ### 🧠 Modelos Disponíveis:
 - **`flash`** *(Padrão)*: Gemini 3.8 Flash — Extremamente rápido e inteligente.
-- **`pro`**: Gemini 3.8 Pro — Raciocínio profundo, arquitetura e análise minuciosa.
+- **`pro`**: Gemini Pro (ex: Gemini 2.5 Pro) — Raciocínio profundo, arquitetura e análise minuciosa.
 - **`flash_lite`**: Gemini Flash Lite — Respostas ultrarrápidas para tarefas simples.
 
 ---

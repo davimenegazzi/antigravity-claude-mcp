@@ -8,7 +8,7 @@ export const TOOLS = [
   {
     name: 'ask_gemini',
     description:
-      'Send a query to Google Gemini (Gemini 3.8 Flash, Gemini 3.8 Pro, etc.) powered directly by local Antigravity. Zero API key needed!',
+      'Send a query to Google Gemini (Gemini 3.8 Flash, Gemini Pro, etc.) powered directly by local Antigravity. Zero API key needed!',
     inputSchema: {
       type: 'object',
       properties: {
@@ -18,8 +18,8 @@ export const TOOLS = [
         },
         model: {
           type: 'string',
-          enum: ['flash', 'pro', 'flash_lite', 'gemini-3.8-flash', 'gemini-3.8-pro', 'gemini-2.5-pro', 'gemini-2.5-flash'],
-          description: "Model to use. 'flash' (Gemini 3.8 Flash, fast) or 'pro' (Gemini 3.8 Pro, reasoning). Defaults to 'flash'.",
+          enum: ['flash', 'pro', 'flash_lite', 'gemini-3.8-flash', 'gemini-2.5-pro', 'gemini-2.5-flash'],
+          description: "Model to use. 'flash' (Gemini 3.8 Flash, fast) or 'pro' (Gemini Pro / 2.5 Pro, reasoning). Defaults to 'flash'.",
         },
         system_instruction: {
           type: 'string',
@@ -164,7 +164,7 @@ ${args.code}
         content: [
           {
             type: 'text',
-            text: `✅ **Antigravity Claude MCP Connector**\n\n- **Platform**: ${status.platform}\n- **Binary Path**: ${status.binaryPath} (${status.isBinaryFound ? 'Found ✅' : 'Missing ❌'})\n- **Brain Directory**: ${status.brainDir} (${status.isBrainFound ? 'Found ✅' : 'Missing ❌'})\n- **Authentication**: Antigravity Native Session (Zero API Key needed!)\n- **Supported Models**:\n  • \`flash\` (Gemini 3.8 Flash)\n  • \`pro\` (Gemini 3.8 Pro)\n  • \`flash_lite\` (Gemini Flash Lite)`,
+            text: `✅ **Antigravity Claude MCP Connector**\n\n- **Platform**: ${status.platform}\n- **Binary Path**: ${status.binaryPath} (${status.isBinaryFound ? 'Found ✅' : 'Missing ❌'})\n- **Brain Directory**: ${status.brainDir} (${status.isBrainFound ? 'Found ✅' : 'Missing ❌'})\n- **Authentication**: Antigravity Native Session (Zero API Key needed!)\n- **Supported Models**:\n  • \`flash\` (Gemini 3.8 Flash)\n  • \`pro\` (Gemini Pro / Gemini 2.5 Pro)\n  • \`flash_lite\` (Gemini Flash Lite)`,
           },
         ],
       };
