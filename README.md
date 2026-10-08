@@ -21,12 +21,31 @@ Você **não precisa** de chave de API (`GEMINI_API_KEY`) nem de cartão de cré
 ## 📦 Requisitos e Dependências
 
 - **Node.js**: Versão 18.0.0 ou superior (instalado no sistema).
-- **Google Antigravity**: Instalado e autenticado na máquina (`agentapi`).
+- **Google Antigravity**: Instalado na máquina. O app **não precisa estar aberto**: o MCP sobe o `language_server` do Antigravity em modo headless sozinho (porta e token aleatórios) e o encerra quando o Claude desconecta. Só é preciso fazer o login do modo headless uma vez (veja abaixo).
 - **Claude**:
   - [Claude Code](https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview) (CLI) **ou**
   - [Claude Desktop](https://claude.ai/download) (Windows, Mac ou Linux).
 
 > 💡 **Zero Dependências npm**: Este projeto não requer `npm install` nem baixa pastas `node_modules`. Ele utiliza módulos padrão nativos do Node.js, garantindo execução ultrarrápida e sem conflitos.
+
+---
+
+## 🔑 Login do modo headless
+
+O modo headless guarda o login num arquivo próprio, separado do login do app. Faça uma vez (Windows, PowerShell):
+
+```powershell
+& "$env:LOCALAPPDATA\Programs\antigravity\resources\bin\language_server.exe" --standalone --headless --override_ide_name antigravity --subclient_type hub --override_ide_version 1.0.0 --override_user_agent_name antigravity --http_server_port 5387 --csrf_token login --app_data_dir antigravity --api_server_url https://generativelanguage.googleapis.com --cloud_code_endpoint https://daily-cloudcode-pa.googleapis.com
+```
+
+Abra o link que aparecer, entre com sua conta Google e aguarde `initialized server successfully`. Depois feche com `Ctrl+C`.
+
+Variáveis opcionais:
+- `ANTIGRAVITY_LS_BINARY`: caminho do `language_server` se não for detectado automaticamente.
+- `ANTIGRAVITY_PROJECT_ID`: projeto do Antigravity usado nas conversas. Padrão `outside-of-project` (sem pasta, o agente não acessa seus workspaces).
+- Se `ANTIGRAVITY_LS_ADDRESS` e `ANTIGRAVITY_CSRF_TOKEN` existirem (terminal do Antigravity), o MCP usa o servidor do app em vez de subir um próprio.
+
+> ⚠️ Essas flags não são documentadas pelo Google; são as mesmas que o app usa internamente. Uma atualização do Antigravity pode mudá-las.
 
 ---
 
@@ -40,15 +59,10 @@ cd antigravity-claude-mcp
 ```
 
 ### Passo 2: Adicione o MCP ao Claude Code
-Basta executar o comando `claude mcp add`:
+Use o caminho absoluto (com caminho relativo o MCP só funciona quando o Claude é aberto nesta pasta):
 
 ```bash
-claude mcp add antigravity node ./bin/index.js
-```
-
-*(Se preferir passar o caminho absoluto)*:
-```bash
-claude mcp add antigravity node "$(pwd)/bin/index.js"
+claude mcp add -s user antigravity -- node "$(pwd)/bin/index.js"
 ```
 
 ### Passo 3: Verifique se foi adicionado
