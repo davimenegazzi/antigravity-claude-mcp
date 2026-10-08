@@ -3,18 +3,45 @@
 > Conector MCP (**Model Context Protocol**) oficial para utilizar **Google Gemini (Gemini 3.8 Flash, Gemini 2.5 Pro, etc.)** dentro do **Claude** (Claude Code e Claude Desktop) através da autenticação nativa do **Google Antigravity**.
 
 ✨ **VANTAGEM EXCLUSIVA: ZERO API KEY** ✨  
-Você **não precisa** de chave de API (`GEMINI_API_KEY`) nem de cartão de crédito no Google AI Studio. Este conector se comunica diretamente com a sessão local autenticada do Antigravity, trazendo respostas instantâneas dos modelos Gemini sem custo de API.
+Você **não precisa** de chave de API (`GEMINI_API_KEY`) nem de cartão de crédito no Google AI Studio. Este conector usa a sessão autenticada do Antigravity, trazendo os modelos Gemini sem custo de API — **e sem precisar deixar o Antigravity aberto**.
 
 ---
 
 ## 📋 Sumário
+- [Como Funciona](#-como-funciona)
 - [Requisitos e Dependências](#-requisitos-e-dependências)
+- [Login do modo headless](#-login-do-modo-headless)
 - [Instalação no Claude Code (Terminal)](#-instalação-no-claude-code)
 - [Instalação no Claude Desktop](#-instalação-no-claude-desktop)
 - [Como Utilizar Dentro do Claude](#-como-utilizar-dentro-do-claude)
 - [Ferramentas Disponíveis (MCP Tools)](#-ferramentas-disponíveis)
 - [Verificação e Diagnóstico](#-verificação-e-diagnóstico)
 - [Licença](#-licença)
+
+---
+
+## ⚙️ Como Funciona
+
+O Antigravity tem um motor interno, o `language_server`, que é quem fala com o Gemini. O app (editor) só inicia esse motor e conversa com ele. Este MCP faz o mesmo, sem o editor:
+
+```text
+Claude ──stdio/MCP──▶ bin/index.js ──spawn──▶ language_server --standalone --headless
+                           │                         (porta e token CSRF aleatórios)
+                           └──▶ language_server agentapi new-conversation ──▶ Gemini
+                           └──◀ lê ~/.gemini/antigravity/brain/<id>/.system_generated/logs/transcript.jsonl
+```
+
+1. **Primeira chamada de ferramenta:** o MCP sobe o `language_server` em modo headless, numa porta livre aleatória e com um token CSRF gerado na hora, usando as mesmas flags que o app usa. Leva alguns segundos; as chamadas seguintes reaproveitam o mesmo servidor.
+2. **Cada pergunta:** abre uma conversa nova com `agentapi new-conversation --model=<flash|pro|flash_lite>`, no projeto `outside-of-project` (sem pasta ligada).
+3. **Resposta:** o MCP acompanha o transcript da conversa e devolve a última resposta do modelo quando ela termina e o arquivo para de mudar. O raciocínio (`thinking`), quando existe, vem entre tags `<thinking>`.
+4. **Fim:** quando o Claude fecha a conexão, o MCP encerra o `language_server` junto.
+
+Se o MCP rodar dentro de um terminal do Antigravity (com `ANTIGRAVITY_LS_ADDRESS` e `ANTIGRAVITY_CSRF_TOKEN` definidos), ele usa o servidor do app em vez de subir um próprio.
+
+**Limitações**
+- O modo headless tem login próprio, separado do app. Precisa ser feito uma vez (veja [Login do modo headless](#-login-do-modo-headless)).
+- Cada chamada é uma conversa nova; o `gemini_chat` reenvia o histórico no prompt.
+- As flags do `language_server` não são documentadas pelo Google. Se uma atualização do Antigravity quebrar o MCP, compare com as flags que o app passa em `resources/app.asar` (função `startLanguageServer`).
 
 ---
 
@@ -169,15 +196,17 @@ Para testar se o Antigravity está detectado corretamente no seu PC antes de abr
 node bin/index.js --check
 ```
 
-Exemplo de saída:
+Exemplo de saída (Windows):
 ```text
 🔍 --- ANTIGRAVITY CLAUDE CONNECTOR CHECK ---
-OS Platform     : linux
-Node Runtime    : v20.20.2
-Entrypoint      : /caminho/antigravity-claude-mcp/bin/index.js
-Antigravity Bin : ~/.gemini/antigravity/bin/agentapi -> ✅ DETECTED
+OS Platform     : win32
+Node Runtime    : v24.13.0
+Entrypoint      : C:\caminho\antigravity-claude-mcp\bin\index.js
+Antigravity Bin : %LOCALAPPDATA%\Programs\antigravity\resources\bin\language_server.exe -> ✅ DETECTED
 Brain Directory : ~/.gemini/antigravity/brain -> ✅ DETECTED
 ```
+
+Se uma ferramenta responder que a sessão headless não está logada, refaça o [Login do modo headless](#-login-do-modo-headless).
 
 ---
 
